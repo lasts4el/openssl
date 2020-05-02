@@ -64,6 +64,10 @@ Patch65: openssl-1.1.1-fips-drbg-selftest.patch
 # Backported fixes including security fixes
 Patch52: openssl-1.1.1-s390x-update.patch
 Patch53: openssl-1.1.1-fips-crng-test.patch
+# EPEL specific changes
+%if 0%{?el7}
+Patch900: openssl-1.1.1-fips-rand-el7.patch
+%endif
 
 License: OpenSSL
 URL: http://www.openssl.org/
@@ -167,6 +171,9 @@ from other formats to the formats used by the OpenSSL toolkit.
 %patch61 -p1 -b .intel-cet
 %patch65 -p1 -b .drbg-selftest
 
+%if 0%{?el7}
+%patch900 -p1 -b .fips-rand-el7
+%endif
 
 %build
 # Figure out which flags we want to use.
@@ -449,7 +456,13 @@ export LD_LIBRARY_PATH
 %dir %{_sysconfdir}/pki/CA/crl
 %dir %{_sysconfdir}/pki/CA/newcerts
 
+%if 0%{?el7}
+%post libs -p /sbin/ldconfig
+
+%postun libs -p /sbin/ldconfig
+else
 %ldconfig_scriptlets libs
+%endif
 
 %changelog
 * Thu Apr 23 2020 Tomáš Mráz <tmraz@redhat.com> 1.1.1g-1

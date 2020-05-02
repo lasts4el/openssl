@@ -1,0 +1,11 @@
+--- openssl-1.1.1g/crypto/rand/rand_unix.c	2020-05-01 18:56:30.953567561 +0000
++++ openssl-1.1.1g/crypto/rand/rand_unix.c.fips-rand-el7	2020-05-01 18:57:05.732819709 +0000
+@@ -22,7 +22,7 @@
+ #include "internal/dso.h"
+ #ifdef __linux
+ # include <sys/syscall.h>
+-# include <sys/random.h>
++# include <linux/random.h>
+ # ifdef DEVRANDOM_WAIT
+ #  include <sys/shm.h>
+ #  include <sys/utsname.h>
